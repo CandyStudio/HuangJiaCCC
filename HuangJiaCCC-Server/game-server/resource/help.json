@@ -1,0 +1,5 @@
+[{"key":"answer","name":"答案","price":50,"desc":"显示正确答案","rate":"question"},
+{"key":"delError","name":"除错","price":50,"desc":"去掉一个错误","rate":"question"},
+{"key":"pass","name":"保险","price":50,"desc":"不扣HP","rate":"question"},
+{"key":"cover","name":"遮挡","price":50,"desc":"题目中文字间隔消失，消失文字出现后3秒渐隐","rate":"question"},
+{"key":"addHP","name":"+HP","price":50,"desc":"增加10HP","rate":"round"}]

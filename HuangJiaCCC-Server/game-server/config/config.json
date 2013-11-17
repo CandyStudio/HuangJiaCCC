@@ -1,0 +1,13 @@
+{
+    "database":{
+        "mongodb":{
+            "host": "localhost",
+            "port": "27017",
+            "database": "hjccc-dev",
+            "user": "root",
+            "password": "",
+            "poolSize": 10,
+            "keepAlive": 0
+        }
+    }
+}
