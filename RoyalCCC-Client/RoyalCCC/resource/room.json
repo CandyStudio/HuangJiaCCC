@@ -1,0 +1,3 @@
+[{"key":"room5","name":"5人挑战场","people":5,"second":15,"questioncount":20,"hp":100,"questiontype":"all"},
+{"key":"room3","name":"3人争霸场","people":3,"second":15,"questioncount":20,"hp":100,"questiontype":"all"},
+{"key":"room2","name":"2人对决场","people":2,"second":15,"questioncount":20,"hp":100,"questiontype":"all"}]
