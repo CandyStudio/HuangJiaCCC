@@ -80,3 +80,21 @@ Handler.prototype.answer = function(msg,session,next){
         }
     });
 };
+
+Handler.prototype.useHelp = function(msg,session,next){
+    console.log('useHelp');
+    var roomid = session.get('roomid');
+    var table = this.app.tables[roomid];
+    table.emit('useHelp',session.uid,msg.id,function(desc){
+        if(!!desc){
+            next(null,{
+                code:500,
+                desc:desc
+            });
+        }else{
+            next(null,{
+                code:200
+            });
+        }
+    });
+};

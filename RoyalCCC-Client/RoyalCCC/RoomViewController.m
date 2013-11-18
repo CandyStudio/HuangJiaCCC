@@ -55,6 +55,17 @@
     }];
     
 }
+- (IBAction)clickHelp:(UIButton *)sender {
+//    self.btnDaAn.tag = 1;
+//    self.btnChuCuo.tag = 2;
+//    self.btnJiaXue.tag = 3;
+//    self.btnPass.tag = 4;
+//    self.btnZheDang.tag = 5;
+    [[GameManager sharedGameManager].roomControl userHelp:@1 success:^{
+        NSLog(@"使用道具成功");
+    }];
+    [self disableHelpBtn];
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -105,6 +116,13 @@
         [self.answerD setFrame:CGRectMake(56, 295, 208, 48)];
         [self.view addSubview:self.answerD];
         
+        
+        self.btnDaAn.tag = 1;
+        self.btnChuCuo.tag = 2;
+        self.btnJiaXue.tag = 3;
+        self.btnPass.tag = 4;
+        self.btnZheDang.tag = 5;
+        
     }
     return self;
 }
@@ -121,6 +139,22 @@
     self.answerC.btnAnswer.enabled = YES;
     self.answerD.btnAnswer.enabled = YES;
 }
+
+- (void)disableHelpBtn{
+    self.btnChuCuo.enabled = NO;
+    self.btnDaAn.enabled = NO;
+    self.btnJiaXue.enabled = NO;
+    self.btnPass.enabled = NO;
+    self.btnZheDang.enabled = NO;
+}
+- (void)enableHelpBtn{
+    self.btnChuCuo.enabled = YES;
+    self.btnDaAn.enabled = YES;
+    self.btnJiaXue.enabled = YES;
+    self.btnPass.enabled = YES;
+    self.btnZheDang.enabled = YES;
+}
+
 - (void)endGame:(NSArray *)paiming{
     self.answerA.hidden = YES;
     self.answerB.hidden = YES;

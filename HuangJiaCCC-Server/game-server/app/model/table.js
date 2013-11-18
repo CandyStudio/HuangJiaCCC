@@ -357,6 +357,44 @@ var exitRoom = function(playerid,frontendId,cb){
 
 
 
+var useHelp = function(playerid,id,cb){
+    var _this = this;
+    playerServer.findByPlayerId(playerid,function(err,docs){
+        var player = docs[0];
+        if(player.coin>=50){
+            player.coin -=50;
+            _this.players[playerid] = player;
+            _this.channel.pushMessage('onHelp',{
+                player:playerid,
+                helpid:id,
+                players:_this.tablePlayers
+            });
+            var member = _this.channel.getMember(playerid);
+            if(!!member){
+                var serverid = member['sid'];
+                var  channelService = app.get('channelService');
+                channelService.pushMessageByUids('onPlayerInfo',{
+                    player:player
+                }, [
+                    {
+                        uid: playerid,
+                        sid: serverid
+                    }
+                ]);
+            }
+            if(cb){
+                cb(null);
+            }
+        }else
+        {
+            if(cb){
+                cb('钱不够');
+            }
+
+        }
+
+    });
+}
 
 var createNewTable = function(channel,room){
     var t = new Table(channel,room);
@@ -374,6 +412,8 @@ var createNewTable = function(channel,room){
     t.on('chenckIfFinish',chenckIfFinish);
 
     t.on('oneGameFinish',oneGameFinish);
+
+    t.on('useHelp',useHelp);
     return t;
 }
 

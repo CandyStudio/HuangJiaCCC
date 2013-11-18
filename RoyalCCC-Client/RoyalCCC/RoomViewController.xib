@@ -7,6 +7,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RoomViewController">
             <connections>
+                <outlet property="btnChuCuo" destination="4Nn-FQ-wEg" id="sqm-BI-fsW"/>
+                <outlet property="btnDaAn" destination="yHx-Lt-z1k" id="LnX-sk-nTh"/>
+                <outlet property="btnJiaXue" destination="WTG-wd-3ej" id="Jwm-S9-kbm"/>
+                <outlet property="btnPass" destination="J4T-MV-JrL" id="BAf-R9-OFP"/>
+                <outlet property="btnZheDang" destination="HVi-3M-0jm" id="QHe-QS-NIz"/>
                 <outlet property="lblCoin" destination="3Cg-yq-sz8" id="Iqi-mD-qdL"/>
                 <outlet property="lblQuestion" destination="cBU-CE-lKf" id="ikB-2J-j66"/>
                 <outlet property="lblScore" destination="Fnb-7U-QmP" id="lHz-Kd-COZ"/>
@@ -66,7 +71,7 @@
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cBU-CE-lKf">
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cBU-CE-lKf">
                     <rect key="frame" x="42" y="56" width="235" height="87"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
@@ -84,6 +89,61 @@
                     <color key="textColor" red="0.98823535442352295" green="0.62352943420410156" blue="0.14509804546833038" alpha="1" colorSpace="deviceRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="yHx-Lt-z1k">
+                    <rect key="frame" x="2" y="420" width="60" height="60"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <state key="normal" title="Button" image="help_daan.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="clickHelp:" destination="-1" eventType="touchUpInside" id="AwY-hz-Ekc"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="WTG-wd-3ej">
+                    <rect key="frame" x="130" y="420" width="60" height="60"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <state key="normal" title="Button" image="help_jiaxue.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="clickHelp:" destination="-1" eventType="touchUpInside" id="Gm1-YW-VdY"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4Nn-FQ-wEg">
+                    <rect key="frame" x="65" y="420" width="60" height="60"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <state key="normal" title="Button" image="help_chucuo.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="clickHelp:" destination="-1" eventType="touchUpInside" id="epm-3L-fBk"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="J4T-MV-JrL">
+                    <rect key="frame" x="196" y="420" width="60" height="60"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <state key="normal" title="Button" image="help_pass.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="clickHelp:" destination="-1" eventType="touchUpInside" id="x0j-xT-aRA"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="HVi-3M-0jm">
+                    <rect key="frame" x="259" y="420" width="60" height="60"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <state key="normal" title="Button" image="help_zhedang.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="clickHelp:" destination="-1" eventType="touchUpInside" id="g2E-x3-zSG"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
@@ -94,6 +154,11 @@
         <image name="back.png" width="104" height="96"/>
         <image name="clock.png" width="64" height="64"/>
         <image name="coin.png" width="212" height="76"/>
+        <image name="help_chucuo.png" width="120" height="120"/>
+        <image name="help_daan.png" width="120" height="120"/>
+        <image name="help_jiaxue.png" width="120" height="120"/>
+        <image name="help_pass.png" width="120" height="120"/>
+        <image name="help_zhedang.png" width="120" height="120"/>
         <image name="score.png" width="212" height="76"/>
         <image name="shop.png" width="104" height="96"/>
     </resources>

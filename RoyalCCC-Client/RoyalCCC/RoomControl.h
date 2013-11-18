@@ -19,4 +19,7 @@
 - (void)addRote;
 - (void)offRote;
 - (RoomControl *)initAndMakeView:(RoomViewController **)viewController andRoomInfo:(NSDictionary *)info;
+
+- (void)userHelp:(NSNumber *)help success:(void(^)())block;
+
 @end

@@ -80,12 +80,17 @@
 		378EB11C18377EB60052D8ED /* GameOverView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 378EB11B18377EB60052D8ED /* GameOverView.xib */; };
 		378EB11E18377F000052D8ED /* gameoverbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 378EB11D18377F000052D8ED /* gameoverbg.png */; };
 		378EB12018377FD60052D8ED /* winner.png in Resources */ = {isa = PBXBuildFile; fileRef = 378EB11F18377FD60052D8ED /* winner.png */; };
-		378EB1221837806A0052D8ED /* 数字_04.png in Resources */ = {isa = PBXBuildFile; fileRef = 378EB1211837806A0052D8ED /* 数字_04.png */; };
+		378EB1221837806A0052D8ED /* num4.png in Resources */ = {isa = PBXBuildFile; fileRef = 378EB1211837806A0052D8ED /* num4.png */; };
 		378EB124183780860052D8ED /* nextgame.png in Resources */ = {isa = PBXBuildFile; fileRef = 378EB123183780860052D8ED /* nextgame.png */; };
 		378EB126183780D20052D8ED /* backroomlist.png in Resources */ = {isa = PBXBuildFile; fileRef = 378EB125183780D20052D8ED /* backroomlist.png */; };
 		37BBCF2C1833580600406256 /* help.json in Resources */ = {isa = PBXBuildFile; fileRef = 37BBCF291833580600406256 /* help.json */; };
 		37BBCF2D1833580600406256 /* question.json in Resources */ = {isa = PBXBuildFile; fileRef = 37BBCF2A1833580600406256 /* question.json */; };
 		37BBCF2E1833580600406256 /* room.json in Resources */ = {isa = PBXBuildFile; fileRef = 37BBCF2B1833580600406256 /* room.json */; };
+		37F622E7183A190B00767AA5 /* help_chucuo.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F622E2183A190B00767AA5 /* help_chucuo.png */; };
+		37F622E8183A190B00767AA5 /* help_daan.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F622E3183A190B00767AA5 /* help_daan.png */; };
+		37F622E9183A190B00767AA5 /* help_jiaxue.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F622E4183A190B00767AA5 /* help_jiaxue.png */; };
+		37F622EA183A190B00767AA5 /* help_pass.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F622E5183A190B00767AA5 /* help_pass.png */; };
+		37F622EB183A190B00767AA5 /* help_zhedang.png in Resources */ = {isa = PBXBuildFile; fileRef = 37F622E6183A190B00767AA5 /* help_zhedang.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -202,12 +207,17 @@
 		378EB11B18377EB60052D8ED /* GameOverView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GameOverView.xib; sourceTree = "<group>"; };
 		378EB11D18377F000052D8ED /* gameoverbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gameoverbg.png; sourceTree = "<group>"; };
 		378EB11F18377FD60052D8ED /* winner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = winner.png; sourceTree = "<group>"; };
-		378EB1211837806A0052D8ED /* 数字_04.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "数字_04.png"; sourceTree = "<group>"; };
+		378EB1211837806A0052D8ED /* num4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = num4.png; sourceTree = "<group>"; };
 		378EB123183780860052D8ED /* nextgame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nextgame.png; sourceTree = "<group>"; };
 		378EB125183780D20052D8ED /* backroomlist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backroomlist.png; sourceTree = "<group>"; };
 		37BBCF291833580600406256 /* help.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = help.json; sourceTree = "<group>"; };
 		37BBCF2A1833580600406256 /* question.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = question.json; sourceTree = "<group>"; };
 		37BBCF2B1833580600406256 /* room.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = room.json; sourceTree = "<group>"; };
+		37F622E2183A190B00767AA5 /* help_chucuo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = help_chucuo.png; sourceTree = "<group>"; };
+		37F622E3183A190B00767AA5 /* help_daan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = help_daan.png; sourceTree = "<group>"; };
+		37F622E4183A190B00767AA5 /* help_jiaxue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = help_jiaxue.png; sourceTree = "<group>"; };
+		37F622E5183A190B00767AA5 /* help_pass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = help_pass.png; sourceTree = "<group>"; };
+		37F622E6183A190B00767AA5 /* help_zhedang.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = help_zhedang.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -454,7 +464,12 @@
 				378EB11F18377FD60052D8ED /* winner.png */,
 				378EB123183780860052D8ED /* nextgame.png */,
 				378EB125183780D20052D8ED /* backroomlist.png */,
-				378EB1211837806A0052D8ED /* 数字_04.png */,
+				378EB1211837806A0052D8ED /* num4.png */,
+				37F622E2183A190B00767AA5 /* help_chucuo.png */,
+				37F622E3183A190B00767AA5 /* help_daan.png */,
+				37F622E4183A190B00767AA5 /* help_jiaxue.png */,
+				37F622E5183A190B00767AA5 /* help_pass.png */,
+				37F622E6183A190B00767AA5 /* help_zhedang.png */,
 			);
 			name = image;
 			sourceTree = "<group>";
@@ -551,6 +566,7 @@
 				378EB0E71835CD520052D8ED /* answercellbg.png in Resources */,
 				378EB126183780D20052D8ED /* backroomlist.png in Resources */,
 				378EB0E51835CCD70052D8ED /* roomlist.png in Resources */,
+				37F622E7183A190B00767AA5 /* help_chucuo.png in Resources */,
 				3731E9A91833306000F2E28A /* RoomViewController.xib in Resources */,
 				3731E9A11832358F00F2E28A /* ViewController.xib in Resources */,
 				378EB1051835DAB70052D8ED /* player_bear.png in Resources */,
@@ -565,15 +581,17 @@
 				378EB0F91835D8CE0052D8ED /* clock.png in Resources */,
 				378EB0FF1835D9C90052D8ED /* peoplehp.png in Resources */,
 				378EB0E11835CC470052D8ED /* coin.png in Resources */,
-				378EB1221837806A0052D8ED /* 数字_04.png in Resources */,
+				378EB1221837806A0052D8ED /* num4.png in Resources */,
 				378EB0DD1835CB2F0052D8ED /* back.png in Resources */,
 				378EB10E1835DE770052D8ED /* C.png in Resources */,
 				378EB0D21835BFCC0052D8ED /* PlayerInfoView.xib in Resources */,
 				3731E93C1831FA9000F2E28A /* InfoPlist.strings in Resources */,
 				378EB124183780860052D8ED /* nextgame.png in Resources */,
 				378EB10D1835DE770052D8ED /* B.png in Resources */,
+				37F622E9183A190B00767AA5 /* help_jiaxue.png in Resources */,
 				378EB11C18377EB60052D8ED /* GameOverView.xib in Resources */,
 				378EB0DF1835CBE50052D8ED /* score.png in Resources */,
+				37F622EB183A190B00767AA5 /* help_zhedang.png in Resources */,
 				37BBCF2C1833580600406256 /* help.json in Resources */,
 				37BBCF2D1833580600406256 /* question.json in Resources */,
 				378EB0FB1835D9A60052D8ED /* peopleinforight.png in Resources */,
@@ -585,10 +603,12 @@
 				378EB0D51835C7E70052D8ED /* BG01.png in Resources */,
 				37BBCF2E1833580600406256 /* room.json in Resources */,
 				3731E99F183232EA00F2E28A /* RoomListViewController.xib in Resources */,
+				37F622EA183A190B00767AA5 /* help_pass.png in Resources */,
 				378EB0EC1835CDD40052D8ED /* 3people.png in Resources */,
 				378EB0DB1835CA6C0052D8ED /* signup.png in Resources */,
 				378EB10C1835DE770052D8ED /* A.png in Resources */,
 				378EB12018377FD60052D8ED /* winner.png in Resources */,
+				37F622E8183A190B00767AA5 /* help_daan.png in Resources */,
 				378EB1061835DAB70052D8ED /* player_cow.png in Resources */,
 				378EB117183627E00052D8ED /* AnswerCellView.xib in Resources */,
 				378EB0F41835D2920052D8ED /* icon-114.png in Resources */,

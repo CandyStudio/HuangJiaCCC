@@ -24,6 +24,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblQuestion;
 @property (weak, nonatomic) IBOutlet UILabel *lblScore;
 @property (weak, nonatomic) IBOutlet UILabel *lblCoin;
+
+
+@property (weak, nonatomic) IBOutlet UIButton *btnDaAn;
+@property (weak, nonatomic) IBOutlet UIButton *btnChuCuo;
+@property (weak, nonatomic) IBOutlet UIButton *btnJiaXue;
+@property (weak, nonatomic) IBOutlet UIButton *btnPass;
+@property (weak, nonatomic) IBOutlet UIButton *btnZheDang;
+
 - (void)addPlayer:(Player *)pl andRoomPlayer:(RoomPlayer *)rpl andSeat:(NSString *)seat;
 - (void)removePlayerAtSeat:(NSString *)seat;
 - (void)showQuestion:(NSDictionary *)dic;
@@ -34,5 +42,9 @@
 
 - (void)disableAnswerBtn;
 - (void)enableAnswerBtn;
+
+- (void)disableHelpBtn;
+- (void)enableHelpBtn;
+
 - (void)endGame:(NSArray *)paiming;
 @end

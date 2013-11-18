@@ -220,7 +220,17 @@
     }];
     
 }
-
+- (void)userHelp:(NSNumber *)help success:(void (^)())block{
+    [[GameManager sharedGameManager].pomelo requestWithRoute:@"room.roomHandler.useHelp" andParams:@{@"id": help} andCallback:^(id arg) {
+        if ([[arg objectForKey:@"code"] intValue] == 200) {
+            block();
+        }else{
+            [[GameManager sharedGameManager] showAlert:[arg objectForKey:@"desc"]];
+        }
+        
+    }];
+    
+}
 
 
 - (void)dealloc{
