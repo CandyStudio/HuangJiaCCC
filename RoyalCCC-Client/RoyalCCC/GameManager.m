@@ -49,10 +49,16 @@
             [self.qusetionDict setObject:obj forKey:[NSString stringWithFormat:@"%@",[obj objectForKey:@"id"]]];
         }];
         
+        [self.pomelo onRoute:@"onPlayerInfo" withCallback:^(id arg) {
+            [self upDatePlayer:[arg objectForKey:@"player"]];
+        }];
+        
     }
     return self;
 }
-
+- (void)dealloc{
+    [self.pomelo offRoute:@"onPlayerInfo"];
+}
 - (void)update{
     NSArray *allSce = [_scheduleDict allValues];
     [allSce enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {

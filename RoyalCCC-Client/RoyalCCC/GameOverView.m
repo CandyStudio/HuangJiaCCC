@@ -42,7 +42,7 @@
 - (void)showPlayer:(NSArray *)players{
     for (int i=0,length = players.count; i<length; i++) {
         NSString *tp = [players objectAtIndex:i];
-        UILabel *lbl = [self valueForKey:[NSString stringWithFormat:@"lblPlayer%d",i]];
+        UILabel *lbl = [self valueForKey:[NSString stringWithFormat:@"lblPlayer%d",i+1]];
         lbl.hidden = NO;
         lbl.text = tp;
     }

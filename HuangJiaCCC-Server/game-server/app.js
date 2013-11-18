@@ -74,7 +74,7 @@ app.configure('production|development', 'connector', function(){
 	app.set('connectorConfig',
 		{
 			connector : pomelo.connectors.hybridconnector,
-			heartbeat : 30,
+			heartbeat : 20,
 			useDict : true,
 			useProtobuf : true,
             disconnectOnTimeout: true,

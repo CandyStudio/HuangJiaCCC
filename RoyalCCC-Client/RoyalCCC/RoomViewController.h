@@ -22,9 +22,15 @@
 @property (strong, nonatomic)  AnswerCellView *answerC;
 @property (strong, nonatomic)  AnswerCellView *answerD;
 @property (weak, nonatomic) IBOutlet UILabel *lblQuestion;
+@property (weak, nonatomic) IBOutlet UILabel *lblScore;
+@property (weak, nonatomic) IBOutlet UILabel *lblCoin;
 - (void)addPlayer:(Player *)pl andRoomPlayer:(RoomPlayer *)rpl andSeat:(NSString *)seat;
 - (void)removePlayerAtSeat:(NSString *)seat;
 - (void)showQuestion:(NSDictionary *)dic;
+
+- (void)updatePlayerInfoView:(RoomPlayer *)roomPlayer;
+
+
 
 - (void)disableAnswerBtn;
 - (void)enableAnswerBtn;

@@ -7,7 +7,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RoomViewController">
             <connections>
+                <outlet property="lblCoin" destination="3Cg-yq-sz8" id="Iqi-mD-qdL"/>
                 <outlet property="lblQuestion" destination="cBU-CE-lKf" id="ikB-2J-j66"/>
+                <outlet property="lblScore" destination="Fnb-7U-QmP" id="lHz-Kd-COZ"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>

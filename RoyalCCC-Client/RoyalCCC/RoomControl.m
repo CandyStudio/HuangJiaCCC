@@ -135,36 +135,45 @@
     }];
     [[GameManager sharedGameManager].pomelo onRoute:@"onAnswer" withCallback:^(id arg) {
         NSLog(@"onAnswer  :%@",arg);
+        [self updateTablePlayers:[arg objectForKey:@"players"]];
     }];
     
     [[GameManager sharedGameManager].pomelo onRoute:@"onHelp" withCallback:^(id arg) {
         NSLog(@"onHelp  :%@",arg);
+        [self updateTablePlayers:[arg objectForKey:@"players"]];
     }];
     [[GameManager sharedGameManager].pomelo onRoute:@"onGemeover" withCallback:^(id arg) {
         NSLog(@"onGemeover  :%@",arg);
         NSDictionary *players = [arg objectForKey:@"players"];
         NSArray *playerarr = [players allValues];
+        NSLog(@"playerarr :%@",playerarr);
         NSArray *sortPlayers =  [playerarr sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             int ps1 = [[obj1 objectForKey:@"score"] intValue];
             int ps2 = [[obj2 objectForKey:@"score"] intValue];
             if (ps1 > ps2) {
-                return NSOrderedDescending;
+                return NSOrderedAscending;
             }
-            return NSOrderedAscending;
+            return NSOrderedDescending;
         }];
+        NSLog(@"sortPlayers : %@",sortPlayers);
         NSMutableArray *result = [NSMutableArray arrayWithCapacity:5];
         for (int i = 0,length = sortPlayers.count; i < length; i++) {
             NSString *username = [[sortPlayers objectAtIndex:i] objectForKey:@"username"];
             if (!username) {
-                username = players objectForKey:<#(id)#>
+                Player *tplayer = [self.players objectForKey:[NSString stringWithFormat:@"%@",[[sortPlayers objectAtIndex:i] objectForKey:@"playerid"]] ];
+                username = tplayer.username;
             }
-            NSString *s = [NSString stringWithFormat:@"<#string#>"]
+
+            NSString *srt = [NSString stringWithFormat:@"%@  %@",username ,[[sortPlayers objectAtIndex:i] objectForKey:@"score"]];
+            [result addObject:srt];
         }
-        _roomController endGame:
+        NSLog(@"%@",result);
+        [_roomController endGame:result];
     }];
     
     [[GameManager sharedGameManager].pomelo onRoute:@"onGameStart" withCallback:^(id arg) {
         [[GameManager sharedGameManager] showAlert:@"开始游戏"];
+        [self updateTablePlayers:[arg objectForKey:@"players"]];
     }];
 }
 - (void)offRote{
@@ -178,6 +187,18 @@
     [[GameManager sharedGameManager].pomelo offRoute:@"onGemeover"];
     [[GameManager sharedGameManager].pomelo offRoute:@"onGameStart"];
 
+}
+
+
+- (void)updateTablePlayers:(NSDictionary *)dict{
+    [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        NSString *playerId = [NSString stringWithFormat:@"%@",key];
+        RoomPlayer *trp = [self.roomPlayers objectForKey:playerId];
+        [trp update:obj];
+        
+        
+        [_roomController updatePlayerInfoView:trp];
+    }];
 }
 
 

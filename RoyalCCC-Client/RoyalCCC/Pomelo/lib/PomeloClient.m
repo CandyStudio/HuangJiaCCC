@@ -409,42 +409,51 @@
 - (void)heartbeat:(NSDictionary *)data{
     if (!_heartbeatInterval) {
         //没设置心跳
+        DEBUGLOG(@"没设置心跳");
         return;
     }
     
     if (_heartbeatTimeoutId) {
+        DEBUGLOG(@"清空心跳超时");
         _heartbeatTimeoutId = NO;
     }
     
     
     if (_heartbeatId) {
+        DEBUGLOG(@"已经发送心跳包了");
         //已经发心跳包了
         return;
     }
     
     _heartbeatId = YES;
+    DEBUGLOG(@"收到心跳");
     [self performSelector:@selector(sendHeartbeat) withObject:nil afterDelay:_heartbeatInterval];
 
     
 }
 
 - (void)sendHeartbeat{
-    NSData *heart = [PomeloProtocol packageEncodeWithType:PackageTypeHeartBeat andBody:nil];
-    [self send:heart];
+    if (_webSocket.readyState == SR_OPEN) {
+        NSData *heart = [PomeloProtocol packageEncodeWithType:PackageTypeHeartBeat andBody:nil];
+        [self send:heart];
+        
+        DEBUGLOG(@"发送心跳包");
+        _nextHeartbeatTimeout = [self timeNow] + _heartbeatTimeout;
+        _heartbeatTimeoutId = YES;
+        [self performSelector:@selector(handleHeartbeatTimeout) withObject:nil afterDelay:_heartbeatTimeout];
+    }
     _heartbeatId = NO;
-    _nextHeartbeatTimeout = [self timeNow] + _heartbeatTimeout;
-    
-    _heartbeatTimeoutId = YES;
-    [self performSelector:@selector(handleHeartbeatTimeout) withObject:nil afterDelay:_heartbeatTimeout];
 }
 
 
 - (void)handleHeartbeatTimeout{
     if (!_heartbeatTimeoutId) {
+        DEBUGLOG(@"取消心跳超时handleHeartbeatTimeout return");
         return;
     }
     NSTimeInterval gap = _nextHeartbeatTimeout  - [self timeNow];
     if (gap > _gapThreshold) {
+        DEBUGLOG(@"_gapThreshold");
         _heartbeatTimeoutId = YES;
         [self performSelector:@selector(handleHeartbeatTimeout) withObject:nil afterDelay:gap];
     }else{
@@ -619,7 +628,7 @@
 }
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error{
     DEBUGLOG(@"error:%@",error);
-    [[self class] cancelPreviousPerformRequestsWithTarget:self];
+    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(handleHeartbeatTimeout) object:nil];
     if (self.delegate && [self.delegate respondsToSelector:@selector(pomeloDisconnect:withError:)] ) {
         [self.delegate pomeloDisconnect:self withError:error];
     }
@@ -627,7 +636,8 @@
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean{
     DEBUGLOG(@"close code :%d   reason:%@  wasClean:%d",code,reason,wasClean);
     PomeloCallback callback = [_callBacks objectForKey:kPomeloCloseCallback];
-    [[self class] cancelPreviousPerformRequestsWithTarget:self];
+    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(handleHeartbeatTimeout) object:nil];
+
     if(callback) {
         callback(self);
     }else{

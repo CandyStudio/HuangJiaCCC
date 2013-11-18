@@ -51,7 +51,7 @@ var onUserLeave = function(app,session){
     delete this.players[session.uid];
     var roomid = session.get('roomid');
     if(!!roomid){
-        app.rpc.room.roomRemote.roomEixt(session,session.uid,roomid,session.frontendId,null);
+        app.rpc.room.roomRemote.roomEixt(session,session.uid,session.frontendId,roomid,null);
     }
     console.log('玩家离开');
 };

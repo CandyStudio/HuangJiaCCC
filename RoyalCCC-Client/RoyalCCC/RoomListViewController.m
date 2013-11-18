@@ -52,7 +52,26 @@
     [super viewWillAppear:animated];
     self.lblCoin.text = [NSString stringWithFormat:@"%@",[GameManager sharedGameManager].player.coin];
     self.lblScore.text = [NSString stringWithFormat:@"%@",[GameManager sharedGameManager].player.score];
+    
+    [[GameManager sharedGameManager].player addObserver:self forKeyPath:@"score" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
+    [[GameManager sharedGameManager].player addObserver:self forKeyPath:@"coin" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
 }
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [[GameManager sharedGameManager].player removeObserver:self forKeyPath:@"score"];
+    [[GameManager sharedGameManager].player removeObserver:self forKeyPath:@"coin"];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if ([keyPath isEqualToString:@"coin"]) {
+        self.lblCoin.text = [NSString stringWithFormat:@"%@",[GameManager sharedGameManager].player.score];
+    }
+    if ([keyPath isEqualToString:@"score"]) {
+        self.lblScore.text = [NSString stringWithFormat:@"%@",[GameManager sharedGameManager].player.score];
+    }
+}
+
+
 
 - (void)didReceiveMemoryWarning
 {

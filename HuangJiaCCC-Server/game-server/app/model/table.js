@@ -9,6 +9,8 @@ var playerServer = require('./player');
 
 var allQuestions = require('../../resource/question');
 
+var app = require('pomelo').app;
+
 var Table = function(channel,room){
     this.channel = channel;
     this.room = room;
@@ -45,6 +47,9 @@ function update(){
     }else{
         if(!this.isAnswered){
             //时间到
+            if(t-this.answerTime>15000){
+                this.emit('receiveAnswer');
+            }
         }
 
 
@@ -59,7 +64,9 @@ var chenckIfFinish = function(){
     if(this.status === Const.TabelStatus.Start){
         var isFinish = false;
         do{
+            console.log('this.currentQuestionIndex:'+this.currentQuestionIndex + ' this.room.questioncount :'+this.room.questioncount);
             if(this.currentQuestionIndex === this.room.questioncount){
+                console.log('题全部打完');
                 //题全部打完
                 isFinish = true;
                 break;
@@ -67,7 +74,9 @@ var chenckIfFinish = function(){
 
             var leftPlayers = underscore.values(this.tablePlayers);
 
+            console.log('leftPlayers.length:'+leftPlayers.length);
             if(leftPlayers.length<2){
+                console.log('剩余人数不够');
                 //剩余人数不够
                 isFinish = true;
                 break;
@@ -80,8 +89,9 @@ var chenckIfFinish = function(){
                     aliveCount++;
                 }
             }
-
+            console.log('aliveCount:'+aliveCount);
             if(aliveCount<2){
+                console.log('活着的人数不够了');
                 //活着的人数不够了
                 isFinish = true;
                 break;
@@ -109,22 +119,40 @@ var chenckIfFinish = function(){
 
 var oneGameFinish = function(){
     this.status = Const.TabelStatus.Wait;
-    this.readyTime = Date.now();
+    this.readyTime = Date.now()+3000;
     var resl = {};
     underscore.extend(resl,this.leavePlayers);
     underscore.extend(resl,this.tablePlayers);
     //为了简单  这里有的有username  没有的需要客户端查
 
-
+    console.log(this.leavePlayers);
+    console.log(this.tablePlayers);
+    console.log(resl);
     this.channel.pushMessage('onGemeover',{
-        player:resl
+        players:resl
     });
+
+
+    var _this = this;
+    var  channelService = app.get('channelService');
     playerServer.findByPlayerIds(underscore.keys(resl),function(err,players){
         if(!err){
             for(var i in players){
                 var tp = players[i];
                 tp.score += resl[tp.playerid].score;
                 tp.save();
+                var member = _this.channel.getMember(tp.playerid);
+                if(!!member){
+                    var serverid = member['sid'];
+                    channelService.pushMessageByUids('onPlayerInfo',{
+                        player:tp
+                    }, [
+                        {
+                            uid: tp.playerid,
+                            sid: serverid
+                        }
+                    ]);
+                }
             }
         }
     });
@@ -192,14 +220,23 @@ var gameStart = function(){
         theQuest[i] = theQuest[j];
         theQuest[j] = swap;
     }
+    this.answerTime = Date.now() + 18000;
+
     this.status = Const.TabelStatus.Start;
     this.leavePlayers = {};
     this.questions = theQuest.slice(0,this.room.questioncount);
     this.currentQuestionIndex = 0;
     this.isAnswered = false;
+    for(var i in this.tablePlayers){
+        var ttp = this.tablePlayers[i];
+        ttp.score = 0;
+        ttp.hp = 100;
+    }
+    var _this = this;
     this.channel.pushMessage('onGameStart',{
-
+        players:_this.tablePlayers
     });
+
     setTimeout(function(){
         _this.emit('sendQuestion');
     },3000);
@@ -227,17 +264,28 @@ var receiveAnswer = function(playerid,answerid,cb){
     console.log('receiveAnswer');
     console.log(arguments);
     if(this.status === Const.TabelStatus.Start){
+        console.log('开始状态');
         if(!this.isAnswered){
-                if(answerid == this.answerid){
-                    cb(null);
+            console.log('没有回答');
+                if((!playerid&&!answerid)||answerid == this.answerid){
+                    if(cb){
+                        cb(null);
+                    }
                     var _this = this;
                     _this.isAnswered = true;
                     if(!!playerid){
                         //有玩家答对
+                        console.log(playerid +' 答对了');
                         var t = Date.now();
                         var tablePlayer = _this.tablePlayers[playerid];
+                        var tScore = Math.ceil( (_this.answerTime - t)/1000);
+
+                        console.log('加分:'+tScore);
+                        tScore = tScore<0?0:tScore;
                         if(!!tablePlayer){
-                            tablePlayer.hp +=Math.ceil( (_this.answerTime - t)/1000);
+                            console.log('加上分');
+                            tablePlayer.hp +=tScore;
+                            tablePlayer.score += tScore;
                         }
                     }
                     for(var tin in _this.tablePlayers){
@@ -261,58 +309,52 @@ var receiveAnswer = function(playerid,answerid,cb){
                     _this.emit('chenckIfFinish');
 
                 }else{
-                    cb('回答错误');
+                    if(cb){
+                        cb('回答错误');
+                    }
+
                 }
 
         }else{
-            cb('已经答过了');
+            if(cb){
+                cb('已经答过了');
+            }
         }
     }else{
-        cb('游戏已经结束');
+        if(cb){
+            cb('游戏已经结束');
+        }
     }
 }
 
-var exitRoom = function(session,cb){
+var exitRoom = function(playerid,frontendId,cb){
     console.log('离开房间');
-    var playerid = session.uid;
-    this.channel.leave(playerid,session.frontendId);
+    console.log(playerid);
+    this.channel.leave(playerid,frontendId);
+
     this.channel.pushMessage('onRoomExit',{
         playerid:playerid
     });
+    console.log(this.status);
     if(this.status === Const.TabelStatus.Start){
         this.leavePlayers[playerid] = this.tablePlayers[playerid];
-        this.leavePlayers[playerid].username = this.player[playerid].username;
+        this.leavePlayers[playerid].username = this.players[playerid].username;
     }
     delete  this.players[playerid];
     delete  this.tablePlayers[playerid];
-
-    _this.emit('chenckIfFinish');
-
+    console.log('chenckIfFinish');
+    this.emit('chenckIfFinish');
+    console.log('this.emit(chenckIfFinish);');
     playerServer.findByPlayerId(playerid,function(err,docs){
         console.log('findByPlayerId');
-        session.set('roomid',null);
-        session.push('roomid');
         if(!!cb){
+            console.log('cb');
             cb(null,docs[0]);
         }
     });
 
 }
 
-var disconnectRoom = function(playerid,sid){
-    console.log('掉线离开房间');
-    this.channel.leave(playerid,sid);
-    this.channel.pushMessage('onRoomExit',{
-        playerid:playerid
-    });
-    if(this.status === Const.TabelStatus.Start){
-        this.leavePlayers[playerid] = this.tablePlayers[playerid];
-    }
-    delete  this.players[playerid];
-    delete  this.tablePlayers[playerid];
-    _this.emit('chenckIfFinish');
-
-}
 
 
 
@@ -323,8 +365,6 @@ var createNewTable = function(channel,room){
     t.on('gameStart',gameStart);
 
     t.on('exitRoom',exitRoom);
-
-    t.on('disconnectRoom',disconnectRoom);
 
     t.on('sendQuestion',sendQuestion);
 

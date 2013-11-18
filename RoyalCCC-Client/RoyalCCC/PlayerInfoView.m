@@ -42,7 +42,10 @@
     }
     if (roomPlayer) {
         float hpper = [roomPlayer.hp floatValue]/100.0;
-        [self.imageHp setFrame:CGRectMake(60,4,8,48*hpper)];
+        CGRect rect = self.imageHp.frame;
+        rect.size.height = 48*hpper;
+        rect.origin.y = 52-48*hpper;
+        [self.imageHp setFrame:rect];
         if (hpper == 0) {
             //sile
         }

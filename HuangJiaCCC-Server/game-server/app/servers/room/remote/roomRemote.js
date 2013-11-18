@@ -9,10 +9,10 @@ var roomRemote = function (app) {
     this.app = app;
 };
 
-roomRemote.prototype.roomEixt = function(playerid,roomid,sid){
+roomRemote.prototype.roomEixt = function(playerid,sid,roomid){
     var table = this.app.tables[roomid];
     if(!!table){
-        table.emit('disconnectRoom',playerid,sid,null);
+        table.emit('exitRoom',playerid,sid,null);
     }
 
 }

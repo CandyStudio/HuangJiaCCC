@@ -12,6 +12,9 @@
 #import "PlayerInfoView.h"
 #import "RoomControl.h"
 #import "AnswerCellView.h"
+#import "GameOverView.h"
+#import "Player.h"
+#import "RoomPlayer.h"
 @implementation RoomViewController
 
 
@@ -29,7 +32,12 @@
     PlayerInfoView *pv = [self valueForKey:tepStr];
     pv.hidden  = YES;
 }
-
+- (void)updatePlayerInfoView:(RoomPlayer *)roomPlayer{
+    NSString *tepStr =[NSString stringWithFormat:@"player%@",roomPlayer.seat];
+    PlayerInfoView *pv = [self valueForKey:tepStr];
+    pv.hidden  = NO;
+    [pv updateInfo:nil andRoomPlayer:roomPlayer];
+}
 - (void)showQuestion:(NSDictionary *)dic{
     self.lblQuestion.hidden = NO;
     self.lblQuestion.text = [dic objectForKey:@"question"];
@@ -119,6 +127,9 @@
     self.answerC.hidden = YES;
     self.answerD.hidden = YES;
     self.lblQuestion.text = @"";
+    GameOverView *gameOverView = [GameOverView createView:paiming];
+    [gameOverView setCenter:CGPointMake(160, 240)];
+    [self.view addSubview:gameOverView];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -128,15 +139,37 @@
     
     self.answerC.delegate = [GameManager sharedGameManager].roomControl;
     self.answerD.delegate = [GameManager sharedGameManager].roomControl;
+    
+    self.lblCoin.text = [NSString stringWithFormat:@"%@",[GameManager sharedGameManager].player.coin];
+    
+    
+    self.lblScore.text = [NSString stringWithFormat:@"%@",[GameManager sharedGameManager].player.score];
+    [[GameManager sharedGameManager].player addObserver:self forKeyPath:@"score" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
+    [[GameManager sharedGameManager].player addObserver:self forKeyPath:@"coin" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-//    NSArray *players = [GameManager sharedGameManager].roomControl.players;
-//    self.player1 = [PlayerInfoView createPlayerInfoView:nil];
-    // Do any additional setup after loading the view from its nib.
+
+
 }
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if ([keyPath isEqualToString:@"coin"]) {
+        self.lblCoin.text = [NSString stringWithFormat:@"%@",[GameManager sharedGameManager].player.coin];
+    }
+    if ([keyPath isEqualToString:@"score"]) {
+        self.lblScore.text = [NSString stringWithFormat:@"%@",[GameManager sharedGameManager].player.score];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [[GameManager sharedGameManager].player removeObserver:self forKeyPath:@"score"];
+    [[GameManager sharedGameManager].player removeObserver:self forKeyPath:@"coin"];
+}
+
+
 
 - (void)didReceiveMemoryWarning
 {
