@@ -478,6 +478,7 @@
     if (!msgId) {
         // server push message
         NSString *msgRoute = [data objectForKey:@"route"];
+        NSLog(@"%@",msgRoute);
         if (msgRoute) {
             PomeloCallback pushCb = [_callBacks objectForKey:msgRoute];
             if (pushCb) {

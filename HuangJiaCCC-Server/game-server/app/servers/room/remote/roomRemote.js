@@ -10,7 +10,10 @@ var roomRemote = function (app) {
 };
 
 roomRemote.prototype.roomEixt = function(playerid,sid,roomid){
+    console.log('roomRemote.prototype.roomEixt');
+    console.log(arguments);
     var table = this.app.tables[roomid];
+    console.log(table);
     if(!!table){
         table.emit('exitRoom',playerid,sid,null);
     }

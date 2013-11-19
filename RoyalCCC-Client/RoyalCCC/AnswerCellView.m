@@ -27,8 +27,8 @@
     [self.btnAnswer addTarget:self action:@selector(answer) forControlEvents:UIControlEventTouchUpInside];
 }
 - (void)answer{
-    if (self.delegate && [self.delegate respondsToSelector:@selector(answerClick:)]) {
-        [self.delegate answerClick:[NSNumber numberWithInt:self.tag]];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(answerClick:andIndex:)]) {
+        [self.delegate answerClick:[NSNumber numberWithLong:self.tag]andIndex:self.index];
     }
 }
 + (AnswerCellView *)createView{
@@ -37,15 +37,20 @@
     
     return view;
 }
-- (void)updateInfo:(NSString *)answer andTag:(NSNumber *)tag{
+- (void)updateInfo:(NSString *)answer andTag:(NSNumber *)tag andIndex:(NSString *)a{
     self.hidden = NO;
     self.answerInfo.text =answer;
     self.tag = [tag intValue];
+    self.imageTitle.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png",a]];
+    self.btnAnswer.imageView.image = [UIImage imageNamed:@"answercellbg.png"];
+    self.index = a;
 }
 - (void)answerRight{
-    
+    self.btnAnswer.imageView.image = [UIImage imageNamed:@"answercellbgright.png"];
+    self.imageTitle.image = [UIImage imageNamed:@"right.png"];
 }
 - (void)answerWrong{
-    
+    self.btnAnswer.imageView.image = [UIImage imageNamed:@"answercellbgwrong.png"];
+    self.imageTitle.image = [UIImage imageNamed:@"wrong.png"];
 }
 @end

@@ -50,8 +50,10 @@ Handler.prototype.entry = function(msg, session, next) {
 var onUserLeave = function(app,session){
     delete this.players[session.uid];
     var roomid = session.get('roomid');
+    console.log('玩家掉线离开');
+    console.log('roomid:'+roomid);
     if(!!roomid){
         app.rpc.room.roomRemote.roomEixt(session,session.uid,session.frontendId,roomid,null);
     }
-    console.log('玩家离开');
+
 };

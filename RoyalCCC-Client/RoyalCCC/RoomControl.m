@@ -69,6 +69,7 @@
         [self.roomPlayers setObject:rp forKey:[NSString stringWithFormat:@"%@",rp.playerid]];
         NSMutableArray *tempArr = [NSMutableArray arrayWithObjects:@"1",@"2",@"3",@"4", nil];
         [self.seatDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            NSLog(@"key:%@    value:%@",key,obj);
             NSString *tstr = nil;
             for (NSString *s in tempArr) {
                 if ([s isEqualToString:key]) {
@@ -87,12 +88,13 @@
         NSLog(@"%@",self.roomPlayers);
     }];
     [[GameManager sharedGameManager].pomelo onRoute:@"onRoomExit" withCallback:^(id arg) {
+        NSLog(@"onRoomExit  :%@",arg);
         NSString *pid = [NSString stringWithFormat:@"%@",[arg objectForKey:@"playerid"]];
         RoomPlayer *rp = [self.roomPlayers objectForKey:pid];
         [self.players removeObjectForKey:pid];
         [self.roomPlayers removeObjectForKey:pid];
         [self.seatDict removeObjectForKey:rp.seat];
-        NSLog(@"onRoomExit  :%@",arg);
+        
         NSLog(@"%@",self.players);
         NSLog(@"%@",self.roomPlayers);
         [_roomController removePlayerAtSeat:rp.seat];
@@ -132,10 +134,12 @@
                               [[ranArr objectAtIndex:3] objectForKey:@"tag"],@"tagD",
                               nil];
         [_roomController showQuestion:info];
+        [_roomController enableHelpBtn];
     }];
     [[GameManager sharedGameManager].pomelo onRoute:@"onAnswer" withCallback:^(id arg) {
         NSLog(@"onAnswer  :%@",arg);
         [self updateTablePlayers:[arg objectForKey:@"players"]];
+        [_roomController disableHelpBtn];
     }];
     
     [[GameManager sharedGameManager].pomelo onRoute:@"onHelp" withCallback:^(id arg) {
@@ -157,7 +161,7 @@
         }];
         NSLog(@"sortPlayers : %@",sortPlayers);
         NSMutableArray *result = [NSMutableArray arrayWithCapacity:5];
-        for (int i = 0,length = sortPlayers.count; i < length; i++) {
+        for (NSUInteger i = 0,length = sortPlayers.count; i < length; i++) {
             NSString *username = [[sortPlayers objectAtIndex:i] objectForKey:@"username"];
             if (!username) {
                 Player *tplayer = [self.players objectForKey:[NSString stringWithFormat:@"%@",[[sortPlayers objectAtIndex:i] objectForKey:@"playerid"]] ];
@@ -169,6 +173,7 @@
         }
         NSLog(@"%@",result);
         [_roomController endGame:result];
+        [_roomController disableHelpBtn];
     }];
     
     [[GameManager sharedGameManager].pomelo onRoute:@"onGameStart" withCallback:^(id arg) {
@@ -181,7 +186,6 @@
     [[GameManager sharedGameManager].pomelo offRoute:@"onRoomEnter"];
     [[GameManager sharedGameManager].pomelo offRoute:@"onRoomExit"];
     [[GameManager sharedGameManager].pomelo offRoute:@"onQuestion"];
-    [[GameManager sharedGameManager].pomelo offRoute:@"onAnswer"];
     [[GameManager sharedGameManager].pomelo offRoute:@"onAnswer"];
     [[GameManager sharedGameManager].pomelo offRoute:@"onHelp"];
     [[GameManager sharedGameManager].pomelo offRoute:@"onGemeover"];
@@ -202,9 +206,10 @@
 }
 
 
-- (void)answerClick:(NSNumber *)tag{
+- (void)answerClick:(NSNumber *)tag andIndex:(NSString *)index{
     
     [_roomController disableAnswerBtn];
+    [_roomController disableHelpBtn];
     if (!tag) {
         tag = [NSNumber numberWithInt:0];
     }

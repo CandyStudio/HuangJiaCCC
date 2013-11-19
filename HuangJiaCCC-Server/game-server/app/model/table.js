@@ -28,6 +28,22 @@ var Table = function(channel,room){
     this.readyTime = 0;
 
     this.answerTime = 0;
+
+
+    /**
+     *
+     * {
+        currentQuestionIndex:{
+            playerid:[helpid]
+        }
+        }
+     *
+     *
+     */
+    this.helpRecord = {};
+
+
+    this.answerRecord  = {};
 };
 
 
@@ -192,7 +208,12 @@ var enterRoom = function(player,session){
                 code:500,
                 desc:'房间满了'
             },function(){
-                _this.channel.level(player.playerid,session.frontendId);
+                console.log('房间满了');
+                var t = _this.channel.getMembers();
+                console.log(t);
+                _this.channel.leave(player.playerid,session.frontendId);
+                t = _this.channel.getMembers();
+                console.log(t);
             });
         }
 
@@ -202,7 +223,13 @@ var enterRoom = function(player,session){
             code:500,
             desc:'游戏开始了'
         },function(){
-            _this.channel.level(player.playerid,session.frontendId);
+            console.log('游戏开始了');
+            var t = _this.channel.getMembers();
+            console.log(t);
+            console.log(_this);
+            _this.channel.leave(player.playerid,session.frontendId);
+            t = _this.channel.getMembers();
+            console.log(t);
         });
     }
 
@@ -212,6 +239,8 @@ var enterRoom = function(player,session){
 
 var gameStart = function(){
     console.log('开始');
+    this.helpRecord = {};
+    this.answerRecord  = {};
     var theQuest = allQuestions.slice(0);
     for (var i = theQuest.length; --i >= 1; ) {
         var j = Math.round(Math.random() * i);
@@ -267,6 +296,19 @@ var receiveAnswer = function(playerid,answerid,cb){
         console.log('开始状态');
         if(!this.isAnswered){
             console.log('没有回答');
+            if(!!playerid){
+                var currentRound = this.answerRecord[this.currentQuestionIndex];
+                if(!currentRound){
+                    this.answerRecord[this.currentQuestionIndex] = {};
+                    currentRound = this.answerRecord[this.currentQuestionIndex];
+                }
+                var tPlayerRecord = currentRound[playerid];
+                if(!!tPlayerRecord){
+                    return cb('已经打过此题');
+                }
+                currentRound[playerid] = true;
+
+            }
                 if((!playerid&&!answerid)||answerid == this.answerid){
                     if(cb){
                         cb(null);
@@ -291,9 +333,25 @@ var receiveAnswer = function(playerid,answerid,cb){
                     for(var tin in _this.tablePlayers){
                         var tablePlayer = _this.tablePlayers[tin];
                         if(tin !== playerid){
-                            tablePlayer.hp -= 15;
-                            if(tablePlayer.hp <0){
-                                tablePlayer.hp = 0;
+                            var currentHelp = _this.helpRecord[_this.currentQuestionIndex];
+                            var tpHelp;
+                            if(!!currentHelp){
+                                tpHelp = _this.helpRecord[_this.currentQuestionIndex][tin];
+                            }
+                            var costHp = true;
+                            if(!!tpHelp){
+                                for(var tHpIndex in tpHelp){
+                                    var helpid  = tpHelp[tHpIndex];
+                                    if(helpid === Const.HelpId.Pass){
+                                        costHp = false;
+                                    }
+                                }
+                            }
+                            if(costHp){
+                                tablePlayer.hp -= 15;
+                                if(tablePlayer.hp <0){
+                                    tablePlayer.hp = 0;
+                                }
                             }
                         }else{
                             var t = Date.now();
@@ -329,9 +387,12 @@ var receiveAnswer = function(playerid,answerid,cb){
 
 var exitRoom = function(playerid,frontendId,cb){
     console.log('离开房间');
-    console.log(playerid);
+    console.log(arguments);
+    var t =this.channel.getMembers();
+    console.log(t);
     this.channel.leave(playerid,frontendId);
-
+    t = this.channel.getMembers();
+    console.log(t);
     this.channel.pushMessage('onRoomExit',{
         playerid:playerid
     });
@@ -358,42 +419,71 @@ var exitRoom = function(playerid,frontendId,cb){
 
 
 var useHelp = function(playerid,id,cb){
+
+
+
     var _this = this;
-    playerServer.findByPlayerId(playerid,function(err,docs){
-        var player = docs[0];
-        if(player.coin>=50){
-            player.coin -=50;
-            _this.players[playerid] = player;
-            _this.channel.pushMessage('onHelp',{
-                player:playerid,
-                helpid:id,
-                players:_this.tablePlayers
-            });
-            var member = _this.channel.getMember(playerid);
-            if(!!member){
-                var serverid = member['sid'];
-                var  channelService = app.get('channelService');
-                channelService.pushMessageByUids('onPlayerInfo',{
-                    player:player
-                }, [
-                    {
-                        uid: playerid,
-                        sid: serverid
+    if(_this.status === Const.TabelStatus.Start){
+        if(!_this.isAnswered){
+            playerServer.findByPlayerId(playerid,function(err,docs){
+                var player = docs[0];
+                if(player.coin>=50){
+                    player.coin -=50;
+                    _this.players[playerid] = player;
+                    var tablePlayer = _this.tablePlayers[playerid];
+                    //加血
+                    if(id === 3){
+                        tablePlayer.hp +=10;
+                        if(tablePlayer.hp >100){
+                            tablePlayer.hp = 100;
+                        }
                     }
-                ]);
-            }
-            if(cb){
-                cb(null);
-            }
-        }else
-        {
-            if(cb){
-                cb('钱不够');
-            }
+                    _this.channel.pushMessage('onHelp',{
+                        player:playerid,
+                        helpid:id,
+                        players:_this.tablePlayers
+                    });
+                    var member = _this.channel.getMember(playerid);
+                    if(!!member){
+                        var serverid = member['sid'];
+                        var  channelService = app.get('channelService');
+                        channelService.pushMessageByUids('onPlayerInfo',{
+                            player:player
+                        }, [
+                            {
+                                uid: playerid,
+                                sid: serverid
+                            }
+                        ]);
+                    }
+                    var currentHelp = _this.helpRecord[_this.currentQuestionIndex];
+                    if(!currentHelp){
+                        _this.helpRecord[_this.currentQuestionIndex] = {};
+                    }
+                    var tarr = _this.helpRecord[_this.currentQuestionIndex][playerid];
+                    tarr = tarr||[];
+                    tarr.push(id);
+                    _this.helpRecord[_this.currentQuestionIndex][playerid] = tarr;
+                    player.save();
+                    if(cb){
+                        cb(null);
+                    }
+                }else
+                {
+                    if(cb){
+                        cb('钱不够');
+                    }
 
+                }
+
+            });
+        }else{
+            cb('此题已经打完了');
         }
+    }else{
+           cb('没开始游戏呢');
+    }
 
-    });
 }
 
 var createNewTable = function(channel,room){

@@ -47,4 +47,8 @@
 - (void)enableHelpBtn;
 
 - (void)endGame:(NSArray *)paiming;
+
+
+- (void)showRightAnswer:(NSString *)index;
+- (void)showWrongAnswer:(NSString *)index;
 @end

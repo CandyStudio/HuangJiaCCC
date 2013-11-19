@@ -49,7 +49,7 @@ Handler.prototype.roomExit = function(msg,session,next){
     var table = this.app.tables[roomid];
     table.emit('exitRoom',session.uid,session.frontendId,function(desc,player){
         session.set('roomid',null);
-        session.push();
+        session.push('roomid');
         if(!!desc){
             next(null,{
                 code:500,

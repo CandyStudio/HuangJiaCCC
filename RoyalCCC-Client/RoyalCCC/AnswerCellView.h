@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @protocol AnswerCellViewDlegate
-- (void)answerClick:(NSNumber *)tag;
+- (void)answerClick:(NSNumber *)tag andIndex:(NSString *)index;
 @end
 @interface AnswerCellView : UIView
 {
@@ -18,11 +18,11 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageTitle;
 @property (weak, nonatomic) IBOutlet UILabel *answerInfo;
 @property (weak, nonatomic) IBOutlet UIButton *btnAnswer;
-
+@property (nonatomic,copy) NSString *index;
 
 + (AnswerCellView *)createView;
 
-- (void)updateInfo:(NSString *)answer andTag:(NSNumber *)tag;
+- (void)updateInfo:(NSString *)answer andTag:(NSNumber *)tag andIndex:(NSString *)a;
 - (void)answerRight;
 - (void)answerWrong;
 @end

@@ -41,14 +41,53 @@
 - (void)showQuestion:(NSDictionary *)dic{
     self.lblQuestion.hidden = NO;
     self.lblQuestion.text = [dic objectForKey:@"question"];
-    [self.answerA updateInfo:[dic objectForKey:@"answerA"] andTag:[dic objectForKey:@"tagA"]];
-    [self.answerB updateInfo:[dic objectForKey:@"answerB"] andTag:[dic objectForKey:@"tagB"]];
-    [self.answerC updateInfo:[dic objectForKey:@"answerC"] andTag:[dic objectForKey:@"tagC"]];
-    [self.answerD updateInfo:[dic objectForKey:@"answerD"] andTag:[dic objectForKey:@"tagD"]];
+    [self.answerA updateInfo:[dic objectForKey:@"answerA"] andTag:[dic objectForKey:@"tagA"]andIndex:@"A"];
+    [self.answerB updateInfo:[dic objectForKey:@"answerB"] andTag:[dic objectForKey:@"tagB"]andIndex:@"B"];
+    [self.answerC updateInfo:[dic objectForKey:@"answerC"] andTag:[dic objectForKey:@"tagC"]andIndex:@"C"];
+    [self.answerD updateInfo:[dic objectForKey:@"answerD"] andTag:[dic objectForKey:@"tagD"]andIndex:@"D"];
+    
 }
 
+- (void)showRightAnswer:(NSString *)index{
+    AnswerCellView *tcell = nil;
+    if (!index) {
 
-- (IBAction)exitRoom:(id)sender { 
+        if (self.answerA.tag > 0) {
+            tcell = self.answerA;
+        }else if (self.answerB.tag >0){
+            tcell = self.answerB;
+        }else if (self.answerC.tag >0){
+            tcell = self.answerC;
+        }else if (self.answerD.tag >0){
+            tcell = self.answerD;
+        }
+    }else{
+        tcell = [self valueForKey:[NSString stringWithFormat:@"answer%@",index]];
+    }
+    [tcell answerRight];
+}
+
+- (void)showWrongAnswer:(NSString *)index{
+    AnswerCellView *tcell = nil;
+    if (!index) {
+        
+        if (self.answerA.tag == 0) {
+            tcell = self.answerA;
+        }else if (self.answerB.tag == 0){
+            tcell = self.answerB;
+        }else if (self.answerC.tag == 0){
+            tcell = self.answerC;
+        }else if (self.answerD.tag == 0){
+            tcell = self.answerD;
+        }
+    }else{
+        tcell = [self valueForKey:[NSString stringWithFormat:@"answer%@",index]];
+    }
+    [tcell answerWrong];
+    tcell.btnAnswer.enabled = NO;
+}
+
+- (IBAction)exitRoom:(id)sender {
     [[GameManager sharedGameManager] exitRoomSuccess:^{
         AppDelegate *app = [UIApplication sharedApplication].delegate;
         [app.navController popViewControllerAnimated:YES];
@@ -61,10 +100,36 @@
 //    self.btnJiaXue.tag = 3;
 //    self.btnPass.tag = 4;
 //    self.btnZheDang.tag = 5;
-    [[GameManager sharedGameManager].roomControl userHelp:@1 success:^{
-        NSLog(@"使用道具成功");
-    }];
     [self disableHelpBtn];
+    void(^block)() = nil;
+    
+    
+    if (self.btnZheDang == sender) {
+        block =^(){
+            
+        };
+    }else if (self.btnPass == sender){
+        block =^(){
+            [self disableAnswerBtn];
+        };
+    }else if (self.btnJiaXue == sender){
+        block =^(){
+            
+        };
+    }else if (self.btnDaAn == sender){
+        
+        block =^(){
+            [self showRightAnswer:nil];
+        };
+        
+    }else if (self.btnChuCuo == sender){
+        block =^(){
+            [self showWrongAnswer:nil];
+        };
+    }
+    
+    
+    [[GameManager sharedGameManager].roomControl userHelp:@1 success:block];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -122,6 +187,9 @@
         self.btnJiaXue.tag = 3;
         self.btnPass.tag = 4;
         self.btnZheDang.tag = 5;
+        
+        
+        [self disableHelpBtn];
         
     }
     return self;
